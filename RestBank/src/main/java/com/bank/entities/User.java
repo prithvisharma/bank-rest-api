@@ -2,7 +2,9 @@ package com.bank.entities;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,13 +25,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
+	@Column(name = "name")
 	private String name;
+	@Column(name = "balance")
 	private double balance;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -39,6 +43,8 @@ public class User {
 	          inverseJoinColumns = @JoinColumn(name = "transaction_id"))
 	private Set <Transaction> transactions = new HashSet<>();
 
+	
+	
 	public User(String name, double balance, Set<Transaction> transactions) {
 		super();
 		this.name = name;

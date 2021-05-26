@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +35,8 @@ public class MainController {
 		
 	@PostMapping("/api/process-transaction")
 	public String processTransaction(@RequestBody Transaction transaction) {
-		long senderId = transaction.getSenderId();
-		long receiverId = transaction.getReceiverId();
+		UUID senderId = transaction.getSenderId();
+		UUID receiverId = transaction.getReceiverId();
 		double amount = transaction.getAmount();
 		
 		User sender = userRepository.getById(senderId);
@@ -71,7 +72,7 @@ public class MainController {
 	}
 	
 	@PostMapping("/api/reverse-transaction")
-	public String reverseTransaction(@RequestBody long id) {
+	public String reverseTransaction(@RequestBody UUID id) {
 		Transaction transaction = transactionRepository.getById(id);
 		User sender = userRepository.getById(transaction.getSenderId());
 		User receiver = userRepository.getById(transaction.getReceiverId());
@@ -89,7 +90,7 @@ public class MainController {
 	}
 	
 	@GetMapping("/api/transaction/{id}")
-	public String displayTransactionById(@PathVariable("id") long id) {
+	public String displayTransactionById(@PathVariable("id") UUID id) {
 		Transaction transaction = transactionRepository.getById(id);
 		return "ID: "+transaction.getId()+"\nDetails: "+transaction.getDetails()
 				+"\nSender ID: "+transaction.getSenderId()+"\nReceiver ID: "+transaction.getReceiverId()
@@ -108,7 +109,7 @@ public class MainController {
 	}
 	
 	@GetMapping("/api/user-transaction/{id}")
-	public List<String> displayTransactionByUser(@PathVariable("id") long id){
+	public List<String> displayTransactionByUser(@PathVariable("id") UUID id){
 		User user = userRepository.getById(id);
 		Set<Transaction> transactions = user.getTransactions();
 		List<String> list = new ArrayList<>();

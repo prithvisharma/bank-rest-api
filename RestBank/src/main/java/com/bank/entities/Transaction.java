@@ -2,7 +2,9 @@ package com.bank.entities;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,21 +22,25 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class Transaction {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
+	@Column(name = "details")
 	private String details;
+	@Column(name = "amount")
 	private double amount;
-	private long senderId;
-	private long receiverId;
+	@Column(name = "sender_id")
+	private UUID senderId;
+	@Column(name = "receiver_id")
+	private UUID receiverId;
 	
 	@ManyToMany(mappedBy = "transactions", fetch = FetchType.LAZY)
 	private Set<User> users = new HashSet<>();
 	
-	public Transaction(String details, double amount, long senderId, long receiverId) {
+	public Transaction(String details, double amount, UUID senderId, UUID receiverId) {
 		super();
 		this.details = details;
 		this.amount = amount;
